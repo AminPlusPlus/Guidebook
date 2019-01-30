@@ -1,13 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".views.MainActivity">
 
-        <android.support.v7.widget.RecyclerView android:layout_width="match_parent" android:layout_height="match_parent"
-                                                android:id="@+id/rvGuides"/>
-    </LinearLayout>
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar" android:layout_width="match_parent"
+                android:layout_height="?actionBarSize">
+
+            <RelativeLayout
+                    android:id="@+id/rltoolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/colorPrimary">
+
+                <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:text="GuideBook"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="18dp"
+                        android:textStyle="bold"/>
+                <ImageView
+                        android:id="@+id/ivList"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/ic_grid"
+                        android:layout_alignParentRight="true"/>
+
+            </RelativeLayout>
+
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_below="@+id/appbar" android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/rvGuides"/>
+        <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+
+    </RelativeLayout>
 </layout>

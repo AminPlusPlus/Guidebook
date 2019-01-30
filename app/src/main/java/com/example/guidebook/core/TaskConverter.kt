@@ -1,6 +1,6 @@
 package com.example.guidebook.core
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import com.example.guidebook.models.Task
 import com.google.gson.Gson
 

@@ -1,12 +1,8 @@
-package com.example.guidebook.viewModels;
+package com.example.guidebook.viewModels
 
 import android.app.Application
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
-import android.arch.paging.DataSource
-import android.arch.paging.LivePagedListBuilder
-import android.arch.paging.PageKeyedDataSource
-import android.arch.paging.PagedList
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import android.os.AsyncTask
 import android.util.Log
 import com.example.guidebook.core.GuideBook
@@ -22,49 +18,19 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import com.example.guidebook.core.ItemDataSource
-import com.example.guidebook.core.ItemDataSourceFactory
 
 
 class TaskListViewModel(mApplication: Application) : ViewModel() {
 
-    private var mTasks: LiveData<List<Task>>
-
-     private var pagedList: LiveData<PagedList<Task>>
-
-
-    //creating livedata for PagedList  and PagedKeyedDataSource
-    lateinit var itemPagedList: LiveData<PagedList<Task>>
-   // var liveDataSource: LiveData<PageKeyedDataSource<Int, Task>>
-
+    var mTasks: LiveData<MutableList<Task>>
+    var isLoaded = false
 
     init {
         MyAsynTask(mApplication).execute()
         mTasks = GuideBook.getDatabaseInstance(mApplication).taskDao().allGuide
-
-          val factory: DataSource.Factory<Int, Task> =
-              GuideBook.getDatabaseInstance(mApplication).taskDao().getAllPaged()
-
-          val pagedListBuilder: LivePagedListBuilder<Int, Task> = LivePagedListBuilder<Int, Task>(
-              factory,
-              3
-          )
-          pagedList = pagedListBuilder.build()
-     /*   val itemDataSourceFactory = ItemDataSourceFactory(mApplication)
-
-        //getting the live data source from data source factory
-        liveDataSource = itemDataSourceFactory.itemLiveDataSource
-
-        //Getting PagedList config
-        val pagedListConfig = PagedList.Config.Builder()
-            .setEnablePlaceholders(false)
-            .setPageSize(ItemDataSource.PAGE_SIZE).build()
-
-        //Building the paged list
-        itemPagedList = LivePagedListBuilder(itemDataSourceFactory, pagedListConfig).build()*/
     }
 
-    class MyAsynTask(application: Application) : AsyncTask<String, String, String>() {
+    inner class MyAsynTask(application: Application) : AsyncTask<String, String, String>() {
 
         var urlConnection: HttpURLConnection? = null
         var guide: GuideBook = getDatabaseInstance(application)
@@ -124,15 +90,13 @@ class TaskListViewModel(mApplication: Application) : ViewModel() {
 
                 guide.taskDao().deleteAll()
                 guide.taskDao().insertGuides(list)
+                isLoaded = true
             }
         }
-
-
     }
 
-    // Use LiveData for getting all the data from the database
-    fun getTasks(): LiveData<PagedList<Task>> {
-        return pagedList
+    fun getTasks(): LiveData<MutableList<Task>> {
+        return mTasks
     }
 
 }
